@@ -20,7 +20,8 @@ async def get_exchange_rates(date):
 async def main():
     try:
         if len(sys.argv) < 2:
-            print("Usage: python script.py <num_days>")
+            print("Usage: python script.py <num_days> <currencies>")
+            print("Example: python script.py 5 EUR USD CHF")
             return
         
         num_days = int(sys.argv[1])
@@ -28,6 +29,7 @@ async def main():
             print("Number of days should be between 1 and 10.")
             return
 
+        selected_currencies = sys.argv[2:]
         today = datetime.now()
         exchange_rate_data = {}
      
@@ -41,7 +43,7 @@ async def main():
                 day_rates = {}
                 for rate in exchange_rates.get('exchangeRate', []):
                     currency = rate['currency']
-                    if currency in ['EUR', 'USD']:  # Filter EUR and USD currencies
+                    if currency in selected_currencies:  # Filter EUR and USD currencies
                         sale_rate = rate.get('saleRate', rate['saleRateNB'])
                         purchase_rate = rate.get('purchaseRate', rate['purchaseRateNB'])
                         day_rates[currency] = {'sale': sale_rate, 'purchase': purchase_rate}
